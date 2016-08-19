@@ -1725,7 +1725,7 @@ namespace GameUp
     public void executeCloudCodeFunction (string module, string function, string payload, Client.ScriptCallback success, Client.ErrorCallback error)
     {
       executeCloudCodeFunction (module, function, payload, (string response) => {
-        success (SimpleJson.DeserializeObject<IDictionary<string, object>> (response));
+        success (SimpleJson.DeserializeObject<JsonObject> (response));
       }, error);
     }
 
@@ -1768,7 +1768,7 @@ namespace GameUp
     public void executeCloudCodeFunction (string module, string function, Client.ScriptCallback success, Client.ErrorCallback error)
     {
       executeCloudCodeFunction (module, function, (string response) => {
-        success (SimpleJson.DeserializeObject<IDictionary<string, object>> (response));
+        success (SimpleJson.DeserializeObject<JsonObject> (response));
       }, error);
     }
 
