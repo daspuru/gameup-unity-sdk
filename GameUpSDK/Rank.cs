@@ -26,6 +26,9 @@ namespace GameUp
     /// <summary> Nickname, suitable for public readonly display. </summary>
     public readonly String Name ;
 
+    /// <summary> Social ID </summary>
+    public readonly string socialId ;
+
     /// <summary> Most up to date rank. </summary>
     public readonly long Ranking ;
 
@@ -121,6 +124,9 @@ namespace GameUp
         switch (key) {
         case "name":
           Name = (string)value;
+          break;
+        case "social_id":
+          socialId = (string)value;
           break;
         case "rank":
           Ranking = (long)value;

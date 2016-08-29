@@ -49,8 +49,10 @@ namespace GameUp
     public readonly long UpdatedAt;
     /// <summary> when this data was first stored. </summary>
     public readonly long CreatedAt;
-    /// <summary>  Permissions on this key. </summary>
+    /// <summary> Permissions on this key. </summary>
     public readonly DatastorePermission Permission;
+    /// <summary> TTL on this object. </summary>
+    public readonly long TTL;
 
     internal DatastoreObjectMetadata (IDictionary<string, object> dict)
     {
@@ -82,6 +84,9 @@ namespace GameUp
           break;
         case "updated_at":
           UpdatedAt = (long)value;
+          break;
+        case "ttl":
+          TTL = (long)value;
           break;
         }
       }

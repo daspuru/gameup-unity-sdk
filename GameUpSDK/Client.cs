@@ -27,10 +27,10 @@ namespace GameUp
     public static readonly int PORT = 443;
 
     [Obsolete("Use Client.AccountsServer to modify the Accounts server host.")]
-    public static string ACCOUNTS_SERVER = "accounts.gameup.io";
+    public static string ACCOUNTS_SERVER = "accounts.heroiclabs.com";
 
     [Obsolete("Use Client.ApiServer to modify the API server host.")]
-    public static string API_SERVER = "api.gameup.io";
+    public static string API_SERVER = "api.heroiclabs.com";
 
     public static bool EnableGZipRequest = false;
     public static bool EnableGZipResponse = false;
@@ -195,7 +195,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public static void Leaderboards (LeaderboardsCallback success, ErrorCallback error)
     {
-      UriBuilder b = new UriBuilder (SCHEME, ApiServer, PORT, "/v0/game/leaderboard");
+      UriBuilder b = new UriBuilder (SCHEME, ApiServer, PORT, "/v0/leaderboard");
       WWWRequest wwwRequest = new WWWRequest (b.Uri, "GET", ApiKey, "");
       wwwRequest.OnSuccess = (String jsonResponse) => {
         success (new LeaderboardList (SimpleJson.DeserializeObject<JsonObject> (jsonResponse)));
@@ -215,7 +215,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public static void Leaderboard (string id, LeaderboardCallback success, ErrorCallback error)
     {
-      Leaderboard (id, 50, 0, false, success, error);
+      Leaderboard (id, 10, null, false, null, success, error);
     }
 
     /// <summary>
@@ -228,12 +228,53 @@ namespace GameUp
     /// <param name="withScoretags">Include Scoretags in the leaderboard entries.</param>
     /// <param name="success">The callback to execute on success.</param>
     /// <param name="error">The callback to execute on error.</param>
+    [Obsolete("Offset is deprecated, use OffsetKey instead.")]
     public static void Leaderboard (string id, int limit, int offset, bool withScoretags, LeaderboardCallback success, ErrorCallback error)
     {
-      string path = "/v0/game/leaderboard/" + id;
+      string path = "/v0/leaderboard/" + id;
       string queryParam = "?offset=" + offset + "&limit=" + limit + "&with_scoretags=" + withScoretags;
       // HttpUtility.ParseQueryString is not available in Unity.
       UriBuilder b = new UriBuilder (SCHEME, ApiServer, PORT, path, queryParam);
+      WWWRequest wwwRequest = new WWWRequest (b.Uri, "GET", ApiKey, "");
+      wwwRequest.OnSuccess = (String jsonResponse) => {
+        success (new Leaderboard (SimpleJson.DeserializeObject<JsonObject> (jsonResponse)));
+      };
+      wwwRequest.OnFailure = (int statusCode, string reason) => {
+        error (statusCode, reason);
+      };
+      wwwRequest.Execute ();
+    }
+      
+    /// <summary>
+    /// Get the leaderboard with the supplied ID; this will contain the top ranked
+    /// gamers on the leaderboard.
+    /// </summary>
+    /// <param name="id">The ID of the Leaderboard.</param>
+    /// <param name="limit">Number of entries to return. Default is 50.</param>
+    /// <param name="offsetKey">Starting point to return ranking. Can be nil or the value returned to you from previous query.</param>
+    /// <param name="withScoretags">Include Scoretags in the leaderboard entries.</param>
+    /// <param name="socialIds">Filter leaderboard entries by matching 'social_id' scoretags with the supplied values.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public static void Leaderboard (string id, int limit, string offsetKey, Boolean withScoretags, string[] socialIds, LeaderboardCallback success, Client.ErrorCallback error)
+    {
+      string path = "/v0/leaderboard/" + id;
+      string queryParam = "?limit=" + limit 
+        + "&with_scoretags=" + withScoretags;
+
+      if (offsetKey != null) {
+        queryParam = queryParam + "&offset_key=" + offsetKey;
+      }
+
+      if (socialIds != null && socialIds.Length > 0) {
+        String filters = socialIds[0];
+        for (int i = 1; i < socialIds.Length; i++) {
+          filters += "," + socialIds[i];
+        }
+        queryParam = queryParam + "&social_ids=" + filters;
+      }
+
+      UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path, queryParam);
       WWWRequest wwwRequest = new WWWRequest (b.Uri, "GET", ApiKey, "");
       wwwRequest.OnSuccess = (String jsonResponse) => {
         success (new Leaderboard (SimpleJson.DeserializeObject<JsonObject> (jsonResponse)));

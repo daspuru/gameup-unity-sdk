@@ -18,6 +18,41 @@ using System.Collections;
 namespace GameUp
 {
 
+  /// <summary> Represents matchmaking queue status. </summary>
+  public class MatchQueueStatus
+  {
+    /// <summary> Filters used to queue the player. </summary>
+    public readonly String[] Filters ;
+
+    /// <summary> When the player was queued at initially </summary>
+    public readonly long QueuedAt ;
+
+    internal MatchQueueStatus (IDictionary<string, object> dict)
+    {
+      foreach (string key in dict.Keys) {
+        object value;
+        dict.TryGetValue (key, out value);
+        if (value == null) {
+          continue;
+        }
+
+        switch (key) {
+        case "filters":
+          List<string> filterList = new List<string> ();
+          JsonArray filterArray = (JsonArray)value;
+          foreach (string entryObject in filterArray) {
+            filterList.Add (entryObject);
+          }
+          Filters = filterList.ToArray ();
+          break;
+        case "queued_at":
+          QueuedAt = (long)value;
+          break;
+        }
+      }
+    }
+  }
+
   /// <summary> Represents an active gamer in a match. </summary>
   public class ActiveGamer
   {

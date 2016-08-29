@@ -66,6 +66,10 @@ namespace GameUp
 
     public delegate void MatchLeaveCallback (String matchId);
 
+    public delegate void MatchQueueStatusCallback (MatchQueueStatus queueStatus);
+
+    public delegate void MatchDequeueCallback ();
+
     public delegate void PurchaseVerifyCallback (PurchaseVerification purchaseVerification);
 
     public delegate void SharedStorageCallback (SharedStorageObject sharedStorageObject);
@@ -373,7 +377,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void UpdateLeaderboard (string id, long score, UpdateLeaderboardCallback success, Client.ErrorCallback error)
     {
-      UpdateLeaderboard (id, score, null, success, error);
+      UpdateLeaderboard (id, score, null, null, success, error);
     }
 
     /// <summary>
@@ -383,7 +387,7 @@ namespace GameUp
     /// </summary>
     /// <param name="id">The ID of the leaderboard.</param>
     /// <param name="score">The new score to submit to the leaderboard.</param>
-    /// <param name="scoreTags">Tags to persist with this leaderboard update</param>
+    /// <param name="scoreTags">Tags to persist with this leaderboard update.</param>
     /// <param name="success">The callback to execute on success.</param>
     /// <param name="error">The callback to execute on error.</param>
     public void UpdateLeaderboard<T> (string id, long score, T scoreTags, UpdateLeaderboardCallback success, Client.ErrorCallback error)
@@ -402,14 +406,50 @@ namespace GameUp
     /// </summary>
     /// <param name="id">The ID of the leaderboard.</param>
     /// <param name="score">The new score to submit to the leaderboard.</param>
-    /// <param name="scoreTags">Tags to persist with this leaderboard update - must be a valid json object or null</param>
+    /// <param name="scoreTags">Tags to persist with this leaderboard update.</param>
     /// <param name="success">The callback to execute on success.</param>
     /// <param name="error">The callback to execute on error.</param>
     public void UpdateLeaderboard (string id, long score, string scoreTags, UpdateLeaderboardCallback success, Client.ErrorCallback error)
     {
-      string path = "/v0/gamer/leaderboard/" + id;
+      UpdateLeaderboard (id, score, scoreTags, null, success, error);
+    }
+
+    /// <summary>
+    /// Submit the supplied score to the specified leaderboard. The new score will only
+    /// overwrite the previous score if it is "better" according to the sorting rules;
+    /// nevertheless the current gamer's rank will always be returned.
+    /// </summary>
+    /// <param name="id">The ID of the leaderboard.</param>
+    /// <param name="score">The new score to submit to the leaderboard.</param>
+    /// <param name="scoreTags">Tags to persist with this leaderboard update.</param>
+    /// <param name="socialId">Social ID to store against this leaderboard entry.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void UpdateLeaderboard<T> (string id, long score, T scoreTags, string socialId, UpdateLeaderboardCallback success, Client.ErrorCallback error)
+    {
+      string tags = null;
+      if (scoreTags != null) {
+        tags = SimpleJson.SerializeObject (scoreTags);
+      }
+      UpdateLeaderboard (id, score, tags, socialId, success, error);
+    }
+
+    /// <summary>
+    /// Submit the supplied score to the specified leaderboard. The new score will only
+    /// overwrite the previous score if it is "better" according to the sorting rules;
+    /// nevertheless the current gamer's rank will always be returned.
+    /// </summary>
+    /// <param name="id">The ID of the leaderboard.</param>
+    /// <param name="score">The new score to submit to the leaderboard.</param>
+    /// <param name="scoreTags">Tags to persist with this leaderboard update - must be a valid json object or null.</param>
+    /// <param name="socialId">Social ID to store against this leaderboard entry.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void UpdateLeaderboard (string id, long score, string scoreTags, string socialId, UpdateLeaderboardCallback success, Client.ErrorCallback error)
+    {
+      string path = "/v0/leaderboard/" + id;
       UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path);
-      WWWRequest wwwRequest = new WWWRequest (b.Uri, "POST", ApiKey, Token);
+      WWWRequest wwwRequest = new WWWRequest (b.Uri, "PUT", ApiKey, Token);
 
       if (scoreTags == null) {
         scoreTags = "null";
@@ -436,7 +476,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void LeaderboardAndRank (string id, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
-      LeaderboardAndRank (id, false, 50, 0, false, success, error);
+      LeaderboardAndRank (id, false, 10, null, success, error);
     }
 
     /// <summary>
@@ -449,7 +489,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void LeaderboardAndRank (string id, Boolean scoretags, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
-      LeaderboardAndRank (id, scoretags, 50, 0, false, success, error);
+      LeaderboardAndRank (id, scoretags, 10, null, success, error);
     }
 
     /// <summary>
@@ -466,7 +506,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void LeaderboardAndRank (string id, int limit, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
-      LeaderboardAndRank (id, false, 50, 0, true, success, error);
+      LeaderboardAndRank (id, false, limit, null, success, error);
     }
 
     /// <summary>
@@ -484,7 +524,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void LeaderboardAndRank (string id, Boolean scoretags, int limit, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
-      LeaderboardAndRank (id, scoretags, 50, 0, true, success, error);
+      LeaderboardAndRank (id, scoretags, limit, null, success, error);
     }
 
     /// <summary>
@@ -496,6 +536,7 @@ namespace GameUp
     /// <param name="offset">Starting point to return ranking. Must be positive, if negative it is treated as an "auto offset".</param>
     /// <param name="success">The callback to execute on success.</param>
     /// <param name="error">The callback to execute on error.</param>
+    [Obsolete("Offset is deprecated, use OffsetKey instead.")]
     public void LeaderboardAndRank (string id, int limit, long offset, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
       LeaderboardAndRank (id, false, limit, offset, success, error);
@@ -511,19 +552,94 @@ namespace GameUp
     /// <param name="offset">Starting point to return ranking. Must be positive, if negative it is treated as an "auto offset".</param>
     /// <param name="success">The callback to execute on success.</param>
     /// <param name="error">The callback to execute on error.</param>
+    [Obsolete("Offset is deprecated, use OffsetKey instead.")]
     public void LeaderboardAndRank (string id, Boolean scoretags, int limit, long offset, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
-      if (offset < 0) {
-        LeaderboardAndRank (id, scoretags, limit, 0, true, success, error);
-      } else {
-        LeaderboardAndRank (id, scoretags, limit, offset, false, success, error);
-      }
+      LeaderboardAndRank (id, scoretags, limit, offset, offset < 0, success, error);
     }
 
+    [Obsolete("Offset is deprecated, use OffsetKey instead.")]
     private void LeaderboardAndRank (string id, Boolean withScoretags, int limit, long offset, Boolean autoOffset, LeaderboardAndRankCallback success, Client.ErrorCallback error)
     {
-      string path = "/v0/gamer/leaderboard/" + id;
+      string path = "/v0/leaderboard/" + id;
       string queryParam = "?offset=" + offset + "&limit=" + limit + "&auto_offset=" + autoOffset + "&with_scoretags=" + withScoretags;
+      UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path, queryParam);
+      WWWRequest wwwRequest = new WWWRequest (b.Uri, "GET", ApiKey, Token);
+      wwwRequest.OnSuccess = (String jsonResponse) => {
+        success (new LeaderboardAndRank (SimpleJson.DeserializeObject<JsonObject> (jsonResponse)));
+      };
+      wwwRequest.OnFailure = (int statusCode, string reason) => {
+        error (statusCode, reason);
+      };
+      wwwRequest.Execute ();
+    }
+
+    /// <summary>
+    /// Fetch the leaderboard with the the number of ranked gamers by limit with the offset
+    /// from the top of the leaderboard ranking.
+    /// </summary>
+    /// <param name="id">The ID of the leaderboard.</param>
+    /// <param name="scoretags">Whether to retrieve scoretags or not.</param>
+    /// <param name="limit">Number of entries to return. Integer between 10 and 50 inclusive.</param>
+    /// <param name="offsetKey">Starting point to return ranking. Can be nil or the value returned to you from previous query.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void LeaderboardAndRank (string id, Boolean scoretags, int limit, String offsetKey, LeaderboardAndRankCallback success, Client.ErrorCallback error)
+    {
+      LeaderboardAndRank (id, scoretags, limit, offsetKey, false, null, success, error);
+    }
+
+    /// <summary>
+    /// Fetch the leaderboard with the the number of ranked gamers by limit with the offset
+    /// from the top of the leaderboard ranking.
+    /// </summary>
+    /// <param name="id">The ID of the leaderboard.</param>
+    /// <param name="scoretags">Whether to retrieve scoretags or not.</param>
+    /// <param name="limit">Number of entries to return. Integer between 10 and 50 inclusive.</param>
+    /// <param name="offsetKey">Starting point to return ranking. Can be nil or the value returned to you from previous query.</param>
+    /// <param name="socialIds">Filter leaderboard entries by matching 'social_id' scoretags with the supplied values.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void LeaderboardAndRank (string id, Boolean scoretags, int limit, string offsetKey, string[] socialIds, LeaderboardAndRankCallback success, Client.ErrorCallback error)
+    {
+      LeaderboardAndRank (id, scoretags, limit, offsetKey, false, socialIds, success, error);
+    }
+
+    /// <summary>
+    /// Fetch the leaderboard with the the number of ranked gamers by limit with the offset
+    /// from the top of the leaderboard ranking.
+    /// </summary>
+    /// <param name="id">The ID of the leaderboard.</param>
+    /// <param name="scoretags">Whether to retrieve scoretags or not.</param>
+    /// <param name="limit">Number of entries to return. Integer between 10 and 50 inclusive.</param>
+    /// <param name="autoOffset">Whether to find the current player's rank automatically and return relative results.</param>
+    /// <param name="socialIds">Filter leaderboard entries by matching 'social_id' scoretags with the supplied values.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void LeaderboardAndRank (string id, Boolean scoretags, int limit, bool autoOffset, string[] socialIds, LeaderboardAndRankCallback success, Client.ErrorCallback error)
+    {
+      LeaderboardAndRank (id, scoretags, limit, null, autoOffset, socialIds, success, error);
+    }
+
+    private void LeaderboardAndRank (string id, Boolean withScoretags, int limit, string offsetKey, Boolean autoOffset, string[] socialIds, LeaderboardAndRankCallback success, Client.ErrorCallback error)
+    {
+      string path = "/v0/leaderboard/" + id;
+      string queryParam = "?limit=" + limit 
+        + "&auto_offset=" + autoOffset 
+        + "&with_scoretags=" + withScoretags;
+
+      if (offsetKey != null) {
+        queryParam = queryParam + "&offset_key=" + offsetKey;
+      }
+
+      if (socialIds != null && socialIds.Length > 0) {
+        String filters = socialIds[0];
+        for (int i = 1; i < socialIds.Length; i++) {
+          filters += "," + socialIds[i];
+        }
+        queryParam = queryParam + "&social_ids=" + filters;
+      }
+
       UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path, queryParam);
       WWWRequest wwwRequest = new WWWRequest (b.Uri, "GET", ApiKey, Token);
       wwwRequest.OnSuccess = (String jsonResponse) => {
@@ -848,6 +964,45 @@ namespace GameUp
       };
       wwwRequest.Execute ();
     }
+
+    /// <summary>
+    /// Get queue status for the current player.
+    /// </summary>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void GetMatchQueueStatus (MatchQueueStatusCallback success, Client.ErrorCallback error)
+    {
+      string path = "/v0/match/queue/";
+      UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path);
+      WWWRequest wwwRequest = new WWWRequest (b.Uri, "GET", ApiKey, Token);
+      wwwRequest.OnSuccess = (String jsonResponse) => {
+        success (new MatchQueueStatus(SimpleJson.DeserializeObject<JsonObject> (jsonResponse)));
+      };
+      wwwRequest.OnFailure = (int statusCode, string reason) => {
+        error (statusCode, reason);
+      };
+      wwwRequest.Execute ();
+    }
+
+    /// <summary>
+    /// Remove the current player from matchmaking queue.
+    /// </summary>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void MatchDequeue (MatchDequeueCallback success, Client.ErrorCallback error)
+    {
+      string path = "/v0/match/queue/";
+      UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path);
+      WWWRequest wwwRequest = new WWWRequest (b.Uri, "DELETE", ApiKey, Token);
+      wwwRequest.OnSuccess = (String jsonResponse) => {
+        success ();
+      };
+      wwwRequest.OnFailure = (int statusCode, string reason) => {
+        error (statusCode, reason);
+      };
+      wwwRequest.Execute ();
+    }
+
 
     /// <summary>
     /// Subscribes to the GameUp Push Notification using a Device Token.
@@ -1533,7 +1688,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastorePut<T> (String table, string key, T data, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastorePut (table, key, SimpleJson.SerializeObject (data), DatastorePermission.Inherit, success, error);
+      DatastorePut (table, key, SimpleJson.SerializeObject (data), DatastorePermission.Inherit, -1, success, error);
     }
       
     /// <summary>
@@ -1551,7 +1706,26 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastorePut<T> (String table, string key, T data, DatastorePermission permission, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastorePut (table, key, SimpleJson.SerializeObject (data), permission, success, error);
+      DatastorePut (table, key, SimpleJson.SerializeObject (data), permission, -1, success, error);
+    }
+
+    /// <summary>
+    /// Update the value of a specific key in the given Datastore table, where the key owner is the gamer making the request. 
+    /// If the key does not exist, it will be created.
+    /// Any existing data for the specified key will be merged with the new data. 
+    /// Fields specified in the new input will replace their old values, if any. 
+    /// Fields present in the existing data but missing in the new input will remain unchanged.
+    /// </summary>
+    /// <param name="table">The name of the table to write to.</param>
+    /// <param name="key">Key to update data. Alphanumeric characters only.</param>
+    /// <param name="data">Data to update in the key.</param>
+    /// <param name="permission">Set permissions for this key.</param>
+    /// <param name="ttl">TTL in milliseconds for this data.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void DatastorePut<T> (String table, string key, T data, DatastorePermission permission, long ttl, Client.SuccessCallback success, Client.ErrorCallback error)
+    {
+      DatastorePut (table, key, SimpleJson.SerializeObject (data), permission, ttl, success, error);
     }
 
     /// <summary>
@@ -1566,7 +1740,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastorePut (string table, string key, string data, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastoreSave ("PUT", table, key, data, DatastorePermission.Inherit, success, error);
+      DatastoreSave ("PUT", table, key, data, DatastorePermission.Inherit, -1, success, error);
     }
 
     /// <summary>
@@ -1582,7 +1756,24 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastorePut (string table, string key, string data, DatastorePermission permission, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastoreSave ("PUT", table, key, data, permission, success, error);
+      DatastoreSave ("PUT", table, key, data, permission, -1, success, error);
+    }
+
+    /// <summary>
+    /// Set the value of a specific key in the given Datastore table, where the key owner is the gamer making the request. 
+    /// If the key does not exist, it will be created.
+    /// Any existing data for the specified key will be completely replaced.
+    /// </summary>
+    /// <param name="table">The name of the table to write to.</param>
+    /// <param name="key">Key to store data. Alphanumeric characters only.</param>
+    /// <param name="data">Data to store in the key.</param>
+    /// <param name="permission">Set permissions for this key.</param>
+    /// <param name="ttl">TTL in milliseconds for this data.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void DatastorePut (string table, string key, string data, DatastorePermission permission, long ttl, Client.SuccessCallback success, Client.ErrorCallback error)
+    {
+      DatastoreSave ("PUT", table, key, data, permission, ttl, success, error);
     }
 
     /// <summary>
@@ -1617,7 +1808,26 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastoreUpdate<T> (string table, string key, T data, DatastorePermission permission, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastoreUpdate (table, key, SimpleJson.SerializeObject (data), permission, success, error);
+      DatastoreUpdate (table, key, SimpleJson.SerializeObject (data), permission, -1, success, error);
+    }
+
+    /// <summary>
+    /// Update the value of a specific key in the given Datastore table, where the key owner is the gamer making the request. 
+    /// If the key does not exist, it will be created.
+    /// Any existing data for the specified key will be merged with the new data. 
+    /// Fields specified in the new input will replace their old values, if any. 
+    /// Fields present in the existing data but missing in the new input will remain unchanged.
+    /// </summary>
+    /// <param name="table">The name of the table to write to.</param>
+    /// <param name="key">Key to update data. Alphanumeric characters only.</param>
+    /// <param name="data">Data to update in the key.</param>
+    /// <param name="permission">Set permissions for this key.</param>
+    /// <param name="ttl">TTL in milliseconds for this data.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void DatastoreUpdate<T> (string table, string key, T data, DatastorePermission permission, long ttl, Client.SuccessCallback success, Client.ErrorCallback error)
+    {
+      DatastoreUpdate (table, key, SimpleJson.SerializeObject (data), permission, ttl, success, error);
     }
 
     /// <summary>
@@ -1634,7 +1844,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastoreUpdate (string table, string key, string data, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastoreSave ("PATCH", table, key, data, DatastorePermission.Inherit, success, error);
+      DatastoreSave ("PATCH", table, key, data, DatastorePermission.Inherit, -1, success, error);
     }
 
     /// <summary>
@@ -1652,10 +1862,29 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastoreUpdate (string table, string key, string data, DatastorePermission permission, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      DatastoreSave ("PATCH", table, key, data, permission, success, error);
+      DatastoreSave ("PATCH", table, key, data, permission, -1, success, error);
     }
 
-    private void DatastoreSave(string method, string table, string key, string data, DatastorePermission permission, Client.SuccessCallback success, Client.ErrorCallback error) {
+    /// <summary>
+    /// Update the value of a specific key in the given Datastore table, where the key owner is the gamer making the request. 
+    /// If the key does not exist, it will be created.
+    /// Any existing data for the specified key will be merged with the new data. 
+    /// Fields specified in the new input will replace their old values, if any. 
+    /// Fields present in the existing data but missing in the new input will remain unchanged.
+    /// </summary>
+    /// <param name="table">The name of the table to write to.</param>
+    /// <param name="key">Key to update data. Alphanumeric characters only.</param>
+    /// <param name="data">Data to update in the key.</param>
+    /// <param name="permission">Set permissions for this key.</param>
+    /// <param name="ttl">TTL in milliseconds for this data.</param>
+    /// <param name="success">The callback to execute on success.</param>
+    /// <param name="error">The callback to execute on error.</param>
+    public void DatastoreUpdate (string table, string key, string data, DatastorePermission permission, long ttl, Client.SuccessCallback success, Client.ErrorCallback error)
+    {
+      DatastoreSave ("PATCH", table, key, data, permission, ttl, success, error);
+    }
+
+    private void DatastoreSave(string method, string table, string key, string data, DatastorePermission permission, long ttl, Client.SuccessCallback success, Client.ErrorCallback error) {
       string path = "/v0/datastore/" + Uri.EscapeUriString (table) + "/" + Uri.EscapeUriString (key);
       UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path);
       WWWRequest wwwRequest = new WWWRequest (b.Uri, method, ApiKey, Token);
@@ -1664,7 +1893,12 @@ namespace GameUp
       if (permission != DatastorePermission.Inherit) {
         string p = SimpleJson.SerializeObject (DatastoreObjectMetadata.ToDictionary(permission));  
         payload += "\"permissions\":" + p + ",";
-      }  
+      }
+
+      if (ttl > 0) {
+        payload += "\"ttl\":" + ttl + ",";
+      }
+
       payload += "\"data\":" + data + "}";
 
       wwwRequest.SetBody (payload);

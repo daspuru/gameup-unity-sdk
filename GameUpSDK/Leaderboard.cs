@@ -64,6 +64,9 @@ namespace GameUp
     /// <summary> The Total number of leaderboard entries. </summary>
     public readonly long Total ;
 
+    /// <summary> The current offset key of the leaderboard entries. </summary>
+    public readonly String OffsetKey;
+
     /// <summary>
     /// The top ranked gamers on this board, up to 50. Already sorted according
     /// to the leaderboard sort settings.
@@ -111,6 +114,9 @@ namespace GameUp
           break;
         case "public_id":
           PublicId = valueString;
+          break;
+        case "offset_key":
+          OffsetKey = valueString;
           break;
         case "sort":
           switch (valueString) {
@@ -166,7 +172,7 @@ namespace GameUp
         }
       }
     }
-
+      
     /// <summary>
     /// An entry for a player in a leaderboard.
     /// </summary>

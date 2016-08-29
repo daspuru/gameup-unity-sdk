@@ -48,6 +48,7 @@ public class GameUpTest : MonoBehaviour
       testLeaderboard(s);
       testScriptExecution(s);
       testDatastore(s);
+      testMatch(s);
 
     }, failure);
   }
@@ -132,8 +133,12 @@ public class GameUpTest : MonoBehaviour
         }
       }
     }, failure);
+      
+    string[] filters = new string[2];
+    filters [0] = "unity_socialId";
+    filters [1] = "missing_unity_socialId";
 
-    Client.Leaderboard (leaderboardId, 10, 20, false, (Leaderboard l) => {
+    Client.Leaderboard (leaderboardId, 10, null, true, filters, (Leaderboard l) => {
       foreach (Leaderboard.Entry en in l.Entries) {
         Debug.Log ("Leaderboard Name: " + l.Name + " " + l.PublicId + " " + l.Sort + " " + l.Type + " " + l.Entries.Length + " " + en.Name);
       }
@@ -145,7 +150,7 @@ public class GameUpTest : MonoBehaviour
 
     ScoretagTest scoretagtest = new ScoretagTest ();
     scoretagtest.Datetime = DateTime.Now.Millisecond;
-    session.UpdateLeaderboard (leaderboardId, DateTime.Now.Millisecond, scoretagtest, (Rank r) => {
+    session.UpdateLeaderboard (leaderboardId, DateTime.Now.Millisecond, scoretagtest, "unity_socialId", (Rank r) => {
       Debug.Log ("Updated leaderboard with scoretags. New rank " + r.Ranking + " for " + r.Name + " with tags " + r.Scoretags.ToString ());
     }, failure);
 
@@ -162,8 +167,8 @@ public class GameUpTest : MonoBehaviour
         Debug.Log ("2-ScoreTags: " + lr.Rank.Scoretags.ToString ());
       }
     }, failure);
-
-    session.LeaderboardAndRank (leaderboardId, 10, 20, (LeaderboardAndRank lr) => {
+      
+    session.LeaderboardAndRank (leaderboardId, true, 10, true, filters, (LeaderboardAndRank lr) => {
       Debug.Log ("3-Retrieved Leaderboard Entries count:  " + lr.Leaderboard.Entries.Length);
       Debug.Log ("3-Retrieved Leaderboard and Rank: " + lr.Leaderboard.Name);
       Debug.Log ("3-Retrieved Leaderboard and Rank: " + lr.Rank.Name);
@@ -186,12 +191,13 @@ public class GameUpTest : MonoBehaviour
         Debug.Log ("Retrieved datastore object data: " + GameUp.SimpleJson.SerializeObject(o.Data));
         armyData.Remove ("soldiers");
         armyData.Add ("soldiers", 1);
-        session.DatastoreUpdate (datastore_table, datastore_key, armyData, () => {
+        session.DatastoreUpdate (datastore_table, datastore_key, armyData, DatastorePermission.Inherit, 50000, () => {
           Debug.Log ("Updated Datastore data: " + datastore_key);
           session.DatastoreQuery(datastore_table, "value.tombstones > 5", (DatastoreSearchResultList results) => {
             Debug.Log ("Searched shared storage: " + results.Count);
             foreach (DatastoreObject result in results) {
               Debug.Log ("Retrieved datastore object owner: " + result.Metadata.Owner);
+              Debug.Log ("Retrieved datastore object ttl: " + result.Metadata.TTL);
               Debug.Log ("Retrieved datastore object data: " + GameUp.SimpleJson.SerializeObject(result.Data));
             }
             session.DatastoreDelete (datastore_table, datastore_key, () => {
@@ -222,6 +228,10 @@ public class GameUpTest : MonoBehaviour
           Debug.Log ("Got match details. Match turn count: " + newMatch.TurnCount);
         }, failure);
 
+        session.MatchDequeue(() => {
+          Debug.Log ("Match dequeue successful.");
+        }, failure);
+
         if (match.TurnGamerId.Equals (gamer.GamerId)) {
           Debug.Log ("Match details : " + match.MatchId + ". Submitting a turn for " + match.WhoamiGamerId);
           IDictionary turnData = new Dictionary<string, string> {{"turndata", "Unity SDK Turn Data"}};
@@ -246,6 +256,12 @@ public class GameUpTest : MonoBehaviour
 
       }, () => {
         Debug.Log ("Gamer queued");
+
+        session.GetMatchQueueStatus ((MatchQueueStatus queueStatus) => { 
+          Debug.Log ("Matchmaking queued at: " + queueStatus.QueuedAt);
+          Debug.Log ("Matchmaking queue filters: " + GameUp.SimpleJson.SerializeObject(queueStatus.Filters));
+        }, failure);
+
       }, failure);
 
       //instead of '0' use Match.UpdatedAt ...

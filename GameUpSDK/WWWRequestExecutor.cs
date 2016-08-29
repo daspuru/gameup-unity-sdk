@@ -108,17 +108,30 @@ namespace GameUp
           }
         } else {
           var body = GetBody (www);
-          Dictionary<string, object> json = SimpleJson.DeserializeObject<Dictionary<string, object>> (body);
-          // HACK: make sure that the error is checking for GameUp error message combinations
-          if (json != null && json.ContainsKey ("status") && json.ContainsKey ("message") && json.ContainsKey ("request")) {
-            int statusCode = int.Parse (System.Convert.ToString (json ["status"]));
+          object objBody = SimpleJson.DeserializeObject (body);
+
+          if (objBody == null) {
+            //invalid JSON. Could be the result of Cloud Code returning HTML.
             if (req.OnFailure != null) {
-              req.OnFailure (statusCode, System.Convert.ToString (json ["message"]));
+              req.OnFailure (415, "Invalid server response received - only JSON object allowed.");
+            }
+          } else if (objBody is JsonArray) {
+            if (req.OnFailure != null) {
+              req.OnFailure (501, "Invalid server response received - only top-level JSON object allowed.");
             }
           } else {
-            if (req.OnSuccess != null) {
-              req.OnSuccess (body);
-            }
+            IDictionary<string, object> json = (JsonObject) objBody;
+            // HACK: make sure that the error is checking for GameUp error message combinations
+            if (json.ContainsKey ("status") && json.ContainsKey ("message") && json.ContainsKey ("request")) {
+              int statusCode = int.Parse (System.Convert.ToString (json ["status"]));
+              if (req.OnFailure != null) {
+                req.OnFailure (statusCode, System.Convert.ToString (json ["message"]));
+              }
+            } else {
+              if (req.OnSuccess != null) {
+                req.OnSuccess (body);
+              }
+            }  
           }
         }
       }
