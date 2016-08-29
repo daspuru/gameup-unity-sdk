@@ -110,7 +110,7 @@ namespace GameUp
           var body = GetBody (www);
           Dictionary<string, object> json = SimpleJson.DeserializeObject<Dictionary<string, object>> (body);
           // HACK: make sure that the error is checking for GameUp error message combinations
-          if (json.ContainsKey ("status") && json.ContainsKey ("message") && json.ContainsKey ("request")) {
+          if (json != null && json.ContainsKey ("status") && json.ContainsKey ("message") && json.ContainsKey ("request")) {
             int statusCode = int.Parse (System.Convert.ToString (json ["status"]));
             if (req.OnFailure != null) {
               req.OnFailure (statusCode, System.Convert.ToString (json ["message"]));
