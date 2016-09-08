@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+### v0.21.0
+
+* Allow JSON array responses.
+* Log non-json response.
+* Add support for Datastore TTL.
+* Add matchmaking queue status and dequeue calls.
+* Add support for social IDs in Leaderboard.
+* Use heroiclabs.com for server addresses.
+
 ### v0.20.1
 
 * Fix problem with deserialising Cloud Code response.
