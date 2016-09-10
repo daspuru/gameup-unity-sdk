@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### v0.21.1
+
+* Fix match dequeue request method.
+
 ### v0.21.0
 
 * Allow JSON array responses.
