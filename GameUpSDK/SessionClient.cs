@@ -994,6 +994,7 @@ namespace GameUp
       string path = "/v0/match/queue/";
       UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path);
       WWWRequest wwwRequest = new WWWRequest (b.Uri, "DELETE", ApiKey, Token);
+      wwwRequest.SetBody ("{}");
       wwwRequest.OnSuccess = (String jsonResponse) => {
         success ();
       };
