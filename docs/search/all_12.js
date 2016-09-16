@@ -36,7 +36,7 @@ var searchData=
   ['singletonmonobehaviour',['SingletonMonoBehaviour',['../class_game_up_1_1_singleton_mono_behaviour.html',1,'GameUp']]],
   ['singletonmonobehaviour_2ecs',['SingletonMonoBehaviour.cs',['../_singleton_mono_behaviour_8cs.html',1,'']]],
   ['singletonmonobehaviour_3c_20wwwrequestexecutor_20_3e',['SingletonMonoBehaviour&lt; WWWRequestExecutor &gt;',['../class_game_up_1_1_singleton_mono_behaviour.html',1,'GameUp']]],
-  ['socialid',['socialId',['../class_game_up_1_1_rank.html#a5aed4f123b6c34b87977cf346d761fcd',1,'GameUp::Rank']]],
+  ['socialid',['socialId',['../class_game_up_1_1_leaderboard_1_1_entry.html#a5c5d61cc271f9d039a45d06a8b26d025',1,'GameUp.Leaderboard.Entry.socialId()'],['../class_game_up_1_1_rank.html#a5aed4f123b6c34b87977cf346d761fcd',1,'GameUp.Rank.socialId()']]],
   ['sort',['Sort',['../class_game_up_1_1_leaderboard.html#a5da6324ad06a3777c3cdf85fa1e7467e',1,'GameUp::Leaderboard']]],
   ['state',['State',['../class_game_up_1_1_achievement.html#ac635695e27018a48de86df85c425b0bc',1,'GameUp::Achievement']]],
   ['storagedelete',['StorageDelete',['../class_game_up_1_1_session_client.html#a266468bd2359ee8275e72c00bb65d741',1,'GameUp::SessionClient']]],

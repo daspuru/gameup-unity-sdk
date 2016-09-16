@@ -158,6 +158,7 @@ var NAVTREEINDEX0 =
 "class_game_up_1_1_leaderboard_1_1_entry.html#a2876831ab08dbdbb274c68477ceb39c3":[1,0,0,11,0,2],
 "class_game_up_1_1_leaderboard_1_1_entry.html#a452428e78bf22d5f3f39130fa88c6534":[1,0,0,11,0,4],
 "class_game_up_1_1_leaderboard_1_1_entry.html#a519eebb74f87b30201761797de1e5873":[1,0,0,11,0,3],
+"class_game_up_1_1_leaderboard_1_1_entry.html#a5c5d61cc271f9d039a45d06a8b26d025":[1,0,0,11,0,6],
 "class_game_up_1_1_leaderboard_1_1_entry.html#a7bf8c4d85bf9220b7a51d500d9f28394":[1,0,0,11,0,5],
 "class_game_up_1_1_leaderboard_1_1_entry.html#a88562e81997c93f78e23e5223aee16ab":[1,0,0,11,0,0],
 "class_game_up_1_1_leaderboard_1_1_entry.html#a987e90695f3f91993eff3116bd502b05":[1,0,0,11,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "class_game_up_1_1_rank.html#a7c6d720f0ad333789c8754e13b22fc48":[1,0,0,25,16],
 "class_game_up_1_1_rank.html#a840f05f9fbeb26986b16f1763180c652":[1,0,0,25,14],
 "class_game_up_1_1_rank.html#a870639ce484f4a2d71161f1e0812afce":[1,0,0,25,5],
-"class_game_up_1_1_rank.html#aa22276569fff4b9ea7b1de997ceb4bc2":[1,0,0,25,1],
-"class_game_up_1_1_rank.html#aa5e720961b650d3e5e7088b8ed0e81ed":[1,0,0,25,7]
+"class_game_up_1_1_rank.html#aa22276569fff4b9ea7b1de997ceb4bc2":[1,0,0,25,1]
 };

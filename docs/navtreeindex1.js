@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"class_game_up_1_1_rank.html#aa5e720961b650d3e5e7088b8ed0e81ed":[1,0,0,25,7],
 "class_game_up_1_1_rank.html#ab08a08cd1e9a7ddf16dd1ff646db8ea9":[1,0,0,25,3],
 "class_game_up_1_1_rank.html#ab18316be34af4dfc6de16856043c1fac":[1,0,0,25,0],
 "class_game_up_1_1_rank.html#ac90d19330384920ef2f11d0fb1d4bd78":[1,0,0,25,9],
@@ -211,8 +212,8 @@ var NAVTREEINDEX1 =
 "functions_w.html":[1,3,0,19],
 "hierarchy.html":[1,2],
 "index.html":[],
-"namespace_game_up.html":[1,0,0],
 "namespace_game_up.html":[0,0,0],
+"namespace_game_up.html":[1,0,0],
 "namespacemembers.html":[0,1,0],
 "namespacemembers_enum.html":[0,1,1],
 "namespaces.html":[0,0],

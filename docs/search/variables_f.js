@@ -8,7 +8,7 @@ var searchData=
   ['scoretags',['Scoretags',['../class_game_up_1_1_leaderboard_1_1_entry.html#a7bf8c4d85bf9220b7a51d500d9f28394',1,'GameUp.Leaderboard.Entry.Scoretags()'],['../class_game_up_1_1_rank.html#a7c6d720f0ad333789c8754e13b22fc48',1,'GameUp.Rank.Scoretags()']]],
   ['seenbefore',['SeenBefore',['../class_game_up_1_1_purchase_verification.html#a96be221cb045ae252255850ca5f46a0b',1,'GameUp::PurchaseVerification']]],
   ['since',['Since',['../class_game_up_1_1_match_change_list.html#a132c1a510b9db744fcbe050d5655270f',1,'GameUp::MatchChangeList']]],
-  ['socialid',['socialId',['../class_game_up_1_1_rank.html#a5aed4f123b6c34b87977cf346d761fcd',1,'GameUp::Rank']]],
+  ['socialid',['socialId',['../class_game_up_1_1_leaderboard_1_1_entry.html#a5c5d61cc271f9d039a45d06a8b26d025',1,'GameUp.Leaderboard.Entry.socialId()'],['../class_game_up_1_1_rank.html#a5aed4f123b6c34b87977cf346d761fcd',1,'GameUp.Rank.socialId()']]],
   ['sort',['Sort',['../class_game_up_1_1_leaderboard.html#a5da6324ad06a3777c3cdf85fa1e7467e',1,'GameUp::Leaderboard']]],
   ['state',['State',['../class_game_up_1_1_achievement.html#ac635695e27018a48de86df85c425b0bc',1,'GameUp::Achievement']]],
   ['subject',['Subject',['../class_game_up_1_1_message.html#a5e731fe4c73f3ce3ecdb9ae4fda00952',1,'GameUp::Message']]],
