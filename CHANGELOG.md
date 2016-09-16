@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### v0.21.2
+
+* Add missing socialId field to the leaderboard entry class.
+
 ### v0.21.1
 
 * Fix match dequeue request method.
