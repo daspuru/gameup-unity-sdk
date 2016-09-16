@@ -190,6 +190,9 @@ namespace GameUp
       /// <summary> When the score was submitted to this leaderboard. </summary>
       public readonly long ScoreAt ;
 
+      /// <summary> Player social ID. </summary>
+      public readonly String socialId ;
+
       /// <summary> Scoretags in this entry. </summary>
       public readonly IDictionary<String, object> Scoretags ;
 
@@ -207,6 +210,9 @@ namespace GameUp
             Rank = (long)value;
             break;
           case "name":
+            Name = (string)value;
+            break;
+          case "social_id":
             Name = (string)value;
             break;
           case "score":
