@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### v0.21.3
+
+* Fix typo in leaderboard socialId.
+
 ### v0.21.2
 
 * Add missing socialId field to the leaderboard entry class.
