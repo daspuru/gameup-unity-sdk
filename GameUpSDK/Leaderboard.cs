@@ -213,7 +213,7 @@ namespace GameUp
             Name = (string)value;
             break;
           case "social_id":
-            Name = (string)value;
+            socialId = (string)value;
             break;
           case "score":
             Score = (long)value;
