@@ -455,11 +455,11 @@ namespace GameUp
         scoreTags = "null";
       }
 
-      if (socialId == null) {
-        socialId = "null";
+      String body = "{\"score\":" + score + ", \"scoretags\":" + scoreTags + "}";
+      if (socialId != null) {
+        body = "{\"score\":" + score + ", \"social_id\":\"" + socialId + "\", \"scoretags\":" + scoreTags + "}";
       }
 
-      String body = "{\"score\":" + score + ", \"social_id\":" + socialId + ", \"scoretags\":" + scoreTags + "}";
       wwwRequest.SetBody (body);
       
       wwwRequest.OnSuccess = (String jsonResponse) => {
