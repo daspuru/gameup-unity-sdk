@@ -1,23 +1,27 @@
 CHANGELOG
 =========
 
-### v0.21.4
+### 0.21.5
+
+* Send social ID as a JSON string.
+
+### 0.21.4
 
 * Fix regression problem with submitting leaderboard social ID.
 
-### v0.21.3
+### 0.21.3
 
 * Fix typo in leaderboard socialId.
 
-### v0.21.2
+### 0.21.2
 
 * Add missing socialId field to the leaderboard entry class.
 
-### v0.21.1
+### 0.21.1
 
 * Fix match dequeue request method.
 
-### v0.21.0
+### 0.21.0
 
 * Allow JSON array responses.
 * Log non-json response.
@@ -26,7 +30,7 @@ CHANGELOG
 * Add support for social IDs in Leaderboard.
 * Use heroiclabs.com for server addresses.
 
-### v0.20.1
+### 0.20.1
 
 * Fix problem with deserialising Cloud Code response.
 
