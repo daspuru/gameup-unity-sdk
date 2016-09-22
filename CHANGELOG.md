@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### v0.21.4
+
+* Fix regression problem with submitting leaderboard social ID.
+
 ### v0.21.3
 
 * Fix typo in leaderboard socialId.
