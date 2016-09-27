@@ -24,13 +24,17 @@ namespace GameUp
 {
   public class WWWRequestExecutor : SingletonMonoBehaviour<WWWRequestExecutor>
   {
-    private static string UNITY_VERSION = Application.unityVersion;
+    private static string UNITY_VERSION;
     private static string BUILD_VERSION = Assembly.GetExecutingAssembly ().GetName ().Version.ToString ();
     private static string OPERATING_SYSTEM = SystemInfo.operatingSystem;
     private static string USER_AGENT =
       String.Format ("gameup-unity-sdk/{0} (Unity {1}; {2})", BUILD_VERSION, UNITY_VERSION, OPERATING_SYSTEM);
 
     internal static void Execute (WWWRequest req) {
+      if (UNITY_VERSION == null) {
+        UNITY_VERSION = Application.unityVersion;
+      }
+
       WWWRequestExecutor.Instance.InitExecute (req);
     }
 
