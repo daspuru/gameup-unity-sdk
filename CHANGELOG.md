@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.6
+
+* Lazily set UnityVersion to avoid warning in Unity 5.4+.
+
 ### 0.21.5
 
 * Send social ID as a JSON string.
