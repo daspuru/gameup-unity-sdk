@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.7
+
+* Lazily initialize useragent string.
+
 ### 0.21.6
 
 * Lazily set UnityVersion to avoid warning in Unity 5.4+.
