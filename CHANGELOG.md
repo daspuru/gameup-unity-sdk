@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.8
+
+* Add conditional check to avoid forbidden headers for WebGL.
+
 ### 0.21.7
 
 * Lazily initialize useragent string.
