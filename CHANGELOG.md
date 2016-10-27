@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.9
+
+* Fix problem with Gamecenter login.
+
 ### 0.21.8
 
 * Add conditional check to avoid forbidden headers for WebGL.
