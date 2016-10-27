@@ -766,7 +766,10 @@ namespace GameUp
         "\"signature\":\"" + base64signature + "\"," +
         "\"public_key_url\":\"" + publicKeyUrl + "\"," +
         "\"timestamp\":" + timestamp + "}";
-      LoginOAuth ("gamecenter", body, null, success, error);
+
+      SendAccountRequest ("login", "gamecenter", body, null, error, (String jsonResponse) => {
+        success (createSessionClient (jsonResponse));
+      });
     }
 
     /// <summary>
