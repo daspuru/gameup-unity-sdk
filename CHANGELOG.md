@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.11
+
+* Fix Update Push Notification URL.
+
 ### 0.21.10
 
 * Fix issue where datastore limit was not applied.
