@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.10
+
+* Fix issue where datastore limit was not applied.
+
 ### 0.21.9
 
 * Fix problem with Gamecenter login.
