@@ -1019,7 +1019,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void SubscribePush (String deviceToken, String[] segments, Client.SuccessCallback success, Client.ErrorCallback error)
     {
-      string path = "/v0/gamer/push/";
+      string path = "/v0/push/subscribe/";
       UriBuilder b = new UriBuilder (Client.SCHEME, Client.ApiServer, Client.PORT, path);
       WWWRequest wwwRequest = new WWWRequest (b.Uri, "PUT", ApiKey, Token);
 
