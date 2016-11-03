@@ -1562,7 +1562,7 @@ namespace GameUp
     /// <param name="error">The callback to execute on error.</param>
     public void DatastoreQuery (string tableName, string luceneQuery, string sort, int limit, DatastoreQueryCallback success, Client.ErrorCallback error)
     {
-      DatastoreQuery (tableName, luceneQuery, sort, 10, 0, success, error);
+      DatastoreQuery (tableName, luceneQuery, sort, limit, 0, success, error);
     }
 
     /// <summary>
