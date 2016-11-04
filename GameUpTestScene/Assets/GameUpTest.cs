@@ -50,6 +50,8 @@ public class GameUpTest : MonoBehaviour
       testDatastore(s);
       testMatch(s);
 
+      testPush(s);
+
     }, failure);
   }
 
@@ -296,6 +298,13 @@ public class GameUpTest : MonoBehaviour
       
     session.executeCloudCodeFunction ("test", "log", scriptData, (IDictionary<string, object> response) => {
       Debug.Log ("Executed cloud code with result:" + GameUp.SimpleJson.SerializeObject (response));
+    }, failure);
+  }
+
+  void testPush (SessionClient session) {
+    string[] segments = new string[0];
+    session.SubscribePush ("invalidPushToken", segments, () => {
+      Debug.Log ("Push registration successful");
     }, failure);
   }
 
