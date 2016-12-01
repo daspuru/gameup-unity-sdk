@@ -115,7 +115,7 @@ namespace GameUp
         case "public_id":
           PublicId = valueString;
           break;
-        case "offset_key":
+        case "next_offset_key":
           OffsetKey = valueString;
           break;
         case "sort":
