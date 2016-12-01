@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+### 0.21.12
+
+* Fix problem decoding Leaderboard Offset Key.
+
 ### 0.21.11
 
 * Fix Update Push Notification URL.
