@@ -3,13 +3,13 @@ GameUp Unity SDK
 
 The Unity SDK for the Heroic Labs (formerly GameUp) service.
 
-[SDK Guide](https://heroiclabs.com/docs/guide/unity/) | [SDK Reference](http://gameup-io.github.io/gameup-unity-sdk/annotated.html)
+[SDK Guide](https://saas.heroiclabs.com/docs/guide/unity/) | [SDK Reference](http://gameup-io.github.io/gameup-unity-sdk/annotated.html)
 
 ---
 
 Heroic Labs is AWS for game developers. Easily add social, multiplayer, and competitive features to any kind of game. The platform handles all server infrastructure required to power games built for desktop, mobile, browser, or web. The goal is to help game studios build beautiful social and multiplayer games which work at massive scale.
 
-For a full list of the API have a look at the [features](https://heroiclabs.com/features).
+For a full list of the API have a look at the [features](https://saas.heroiclabs.com/features).
 
 ### Install
 
@@ -35,7 +35,7 @@ The API key shown above __must be replaced__ with one of your own from the [Deve
 
 ### SDK Guide
 
-You can find the full guide for the Unity SDK [online](https://heroiclabs.com/docs/guide/unity/).
+You can find the full guide for the Unity SDK [online](https://saas.heroiclabs.com/docs/guide/unity/).
 
 ### Contribute
 
